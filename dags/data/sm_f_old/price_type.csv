@@ -1,0 +1,10 @@
+code,name,short_name,with_card,state,price_type_kind,currency_code
+PRCT:1,Промо,Промо,N,A,S,
+PRCT:2,Акция,Акция,N,A,S,
+PRCT:3,Возврат,Возврат,N,A,S,
+PRCT:4,Передача забаланс,Передача забаланс,N,A,S,
+,Себестимость USD variable,Себестимость USD variable,N,A,S,840
+,Себестимость UZS variable (NEW),Себестимость UZS variable (NEW),Y,A,S,860
+,Себестимость UZS variable,Себестимость UZS variable,N,A,S,860
+,Оптовая цена USD fixed (шт),Оптовая цена USD fixed (шт),N,A,S,840
+,Оптом цена UZS fixed,Оптом цена UZS fixed,N,A,S,860

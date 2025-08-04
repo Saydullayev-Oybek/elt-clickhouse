@@ -1,0 +1,54 @@
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-db-volume-2:/var/lib/postgresql/data
+
+  airflow-webserver:
+    build: .
+    image: custom-airflow:latest
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
+    volumes:
+      - ./dags:/opt/airflow/dags
+    ports:
+      - "9090:8080"
+    command: webserver
+
+  airflow-scheduler:
+    build: .
+    image: custom-airflow:latest
+    restart: always
+    depends_on:
+      - airflow-webserver
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+    command: scheduler
+
+  # clickhouse:
+  #   image: clickhouse/clickhouse-server:latest
+  #   environment:
+  #     CLICKHOUSE_USER: admin
+  #     CLICKHOUSE_PASSWORD: admin123
+  #   ports:
+  #     - "8123:8123"
+  #     - "9000:9000"
+  #   volumes:
+  #     - clickhouse_data:/var/lib/clickhouse
+
+volumes:
+  postgres-db-volume-2:
+  # clickhouse_data:

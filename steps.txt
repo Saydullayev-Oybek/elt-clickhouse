@@ -1,0 +1,10 @@
+1-step:
+    docker-compose build
+2-step:
+    docker-compose run --rm airflow-webserver airflow db migrate
+3-step:
+    docker-compose run --rm airflow-webserver airflow users create --username admin --firstname Oybek --lastname Saydullayev --role Admin --email admin@example.com
+4-step:
+    docker-compose up -d
+if dag_error:
+    docker-compose run --rm airflow-webserver python /opt/airflow/dags/elt_inventory.py
