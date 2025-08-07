@@ -14,7 +14,8 @@ def transform_return_transaction():
             account Nullable(String),
             amount Nullable(Float32),
             "kt/dt" Nullable(String),
-            type Nullable(String)
+            type Nullable(String),
+            transaction_type DEFAULT('return')
         )
         ENGINE = MergeTree
         ORDER BY date
@@ -82,7 +83,6 @@ def transform_return_transaction():
                     'amount': row['cost_amount'],
                     'kt/dt': 'kt',
                     'type': 'cost_amount'
-                    
                 }
             ])
 

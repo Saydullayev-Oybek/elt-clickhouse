@@ -7,14 +7,14 @@ def download_cost_price():
         
         if os.path.exists("/opt/airflow/dags/data/sm_f/total_cost_price.xlsx"):
 
-            total_cost_price = pd.read_excel("dags/data/sm_f/total_cost_price.xlsx")[3:]
+            total_cost_price = pd.read_excel("/opt/airflow/dags/data/sm_f/total_cost_price.xlsx")[3:]
             total_cost_price.columns.values[0] = 'order_id'
             total_cost_price.columns.values[1] = 'type_return'
             total_cost_price.columns.values[2] = 'cost_price'
 
             if os.path.exists("/opt/airflow/dags/data/sm_f_old/total_cost_price.csv"):
                 total_cost_price_old = pd.read_csv("/opt/airflow/dags/data/sm_f_old/total_cost_price.csv")
-                merged_total_cost_price = pd.merge(total_cost_price, total_cost_price_old, on=['order_id', 'product_id'], how='left', indicator=True)
+                merged_total_cost_price = pd.merge(total_cost_price, total_cost_price_old, on=['order_id'], how='left', indicator=True)
                 merged_total_cost_price = merged_total_cost_price[merged_total_cost_price['_merge'] == 'left_only'].drop(columns=['_merge'])
                 total_cost_price.to_csv("/opt/airflow/dags/data/sm_f_old/total_cost_price.csv", index=False)
                 merged_total_cost_price.to_csv("/opt/airflow/dags/data/sm_f/total_cost_price_to_load.csv", index=False)
