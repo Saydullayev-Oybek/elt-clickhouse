@@ -39,20 +39,6 @@ services:
       - ./dags:/opt/airflow/dags
     command: scheduler
 
-  airflow-init:
-    build: .
-    image: custom-airflow:latest
-    depends_on:
-      - postgres
-    environment:
-      AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    command: bash -c "
-      airflow db migrate &&
-      airflow users create --username admin --firstname Oybek --lastname Saydullayev --role Admin --email admin@example.com --password admin || true
-    
-
-
 volumes:
   postgres-db-volume-2:
   # clickhouse_data:
