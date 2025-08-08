@@ -9,4 +9,4 @@ RUN pip install --no-cache-dir clickhouse-connect pandas requests django-crispy-
 COPY ./dags /opt/airflow/dags
 COPY supervisord.conf /etc/supervisord.conf
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+CMD ["airflow", "webserver"]
