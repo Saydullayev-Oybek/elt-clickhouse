@@ -8,8 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements if you have them
-COPY requirements.txt /requirements.txt
-RUN pip install --no-cache-dir -r /requirements.txt || true
+USER airflow
+RUN pip install --no-cache-dir clickhouse-connect pandas requests pyarrow openpyxl django-crispy-forms
 
 # Copy DAGs
 COPY ./dags /opt/airflow/dags
