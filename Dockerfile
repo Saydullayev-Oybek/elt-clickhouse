@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 USER airflow
 
 # Install Python dependencies
-RUN pip install --no-cache-dir clickhouse-connect pandas requests pyarrow openpyxl
+RUN pip install --no-cache-dir clickhouse-connect pandas requests pyarrow openpyxl psycopg2-binary django-crispy-forms 
 
 # Copy DAGs and entrypoint script
 COPY ./dags /opt/airflow/dags
