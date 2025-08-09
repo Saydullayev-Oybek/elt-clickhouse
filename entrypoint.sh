@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-airflow db init
+echo "Migrating Airflow DB..."
+airflow db migrate
 
 # STEP 2: Create admin user (agar yo‘q bo‘lsa)
 airflow users create \
