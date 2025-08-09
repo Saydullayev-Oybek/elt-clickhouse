@@ -1,7 +1,7 @@
 #!/bin/bash
+set -e
 
-# STEP 1: Initialize DB
-airflow db migrate
+airflow db init
 
 # STEP 2: Create admin user (agar yo‘q bo‘lsa)
 airflow users create \
@@ -13,5 +13,8 @@ airflow users create \
     --password admin \
     || echo "User already exists"
 
-# STEP 3: Launch webserver
+# Start scheduler in background
+airflow scheduler &
+
+# Start webserver in foreground
 exec airflow webserver

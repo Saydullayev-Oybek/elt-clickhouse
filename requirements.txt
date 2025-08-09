@@ -1,0 +1,6 @@
+clickhouse-connect 
+pandas 
+requests 
+django-crispy-forms 
+pyarrow 
+openpyxl
