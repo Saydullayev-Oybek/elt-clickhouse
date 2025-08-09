@@ -1,29 +1,31 @@
 FROM apache/airflow:2.9.0-python3.10
 
+# Switch to root to copy files
 USER root
+
+# Install OS deps (optional)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-USER airflow
-
-# Install Python packages
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy requirements if you have them
+COPY requirements.txt /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt || true
 
 # Copy DAGs
 COPY ./dags /opt/airflow/dags
 
-USER root
-# Copy entrypoint into the image root
-COPY ./entrypoint.sh /entrypoint.sh
-# Make sure it's executable
-RUN ls -l /entrypoint.sh && chmod +x /entrypoint.sh
+# Copy entrypoint script and make executable
+COPY --chmod=755 ./entrypoint.sh /entrypoint.sh
+
+# Switch back to airflow user
 USER airflow
 
-# Default Airflow env vars
+# Airflow ENV vars
 ENV AIRFLOW_HOME=/opt/airflow
 ENV AIRFLOW__CORE__EXECUTOR=SequentialExecutor
-ENV AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://postgres:KPFqRIlSoTiFOVisEyjCkXeUcnBIkImj@centerbeam.proxy.rlwy.net:30385/railway
+
+# IMPORTANT: use your Railway Postgres connection string
+ENV AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:KPFqRIlSoTiFOVisEyjCkXeUcnBIkImj@centerbeam.proxy.rlwy.net:30385/railway
 
 EXPOSE 8080
 

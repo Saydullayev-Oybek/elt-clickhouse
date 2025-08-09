@@ -10,8 +10,7 @@ airflow users create \
     --lastname Saydullayev \
     --role Admin \
     --email admin@example.com \
-    --password admin \
-    || echo "User already exists"
+    --password admin || true
 
 # Start scheduler in background
 airflow scheduler &
