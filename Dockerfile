@@ -19,5 +19,9 @@ USER root
 RUN chmod +x /entrypoint.sh
 USER airflow
 
+# Environment variables for Airflow
+ENV AIRFLOW_HOME=/opt/airflow
+ENV AIRFLOW__CORE__EXECUTOR=LocalExecutor
+
 # Railway will run this script
 ENTRYPOINT ["/entrypoint.sh"]

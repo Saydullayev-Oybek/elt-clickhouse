@@ -4,3 +4,4 @@ requests
 django-crispy-forms 
 pyarrow 
 openpyxl
+psycopg2-binary

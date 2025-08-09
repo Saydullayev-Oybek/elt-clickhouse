@@ -1,12 +1,15 @@
 #!/bin/bash
 set -e
 
-# If Railway provides PORT, use it for Airflow webserver
-export AIRFLOW__WEBSERVER__WEB_SERVER_PORT=${PORT:-8080}
-export AIRFLOW__WEBSERVER__WEB_SERVER_HOST=0.0.0.0
+echo "=== Starting Airflow with Postgres backend ==="
 
-# Make sure database is up-to-date
-airflow db migrate
+# Wait for Postgres to be ready
+echo "Waiting for Postgres..."
+sleep 5
+
+# Initialize database (safe to run every time)
+airflow db upgrade
+
 # STEP 2: Create admin user (agar yo‘q bo‘lsa)
 airflow users create \
     --username admin \
@@ -16,8 +19,23 @@ airflow users create \
     --email admin@example.com \
     --password admin || true
 
-# Start scheduler in background
-airflow scheduler &
 
-# Start webserver in foreground
-exec airflow webserver
+# Start both scheduler and webserver via supervisord
+cat <<EOF > /etc/supervisord.conf
+[supervisord]
+nodaemon=true
+
+[program:scheduler]
+command=airflow scheduler
+autostart=true
+autorestart=true
+startsecs=5
+
+[program:webserver]
+command=airflow webserver --port 8080
+autostart=true
+autorestart=true
+startsecs=5
+EOF
+
+exec /usr/bin/supervisord -c /etc/supervisord.conf
