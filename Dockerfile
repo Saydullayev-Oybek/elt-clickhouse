@@ -13,12 +13,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy DAGs
 COPY ./dags /opt/airflow/dags
 
+USER root
 # Copy entrypoint into the image root
 COPY ./entrypoint.sh /entrypoint.sh
-
 # Make sure it's executable
 RUN ls -l /entrypoint.sh && chmod +x /entrypoint.sh
-
+USER airflow
 
 # Default Airflow env vars
 ENV AIRFLOW_HOME=/opt/airflow
