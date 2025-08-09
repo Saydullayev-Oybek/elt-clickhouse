@@ -8,7 +8,7 @@ echo "Waiting for Postgres..."
 sleep 5
 
 # Initialize database (safe to run every time)
-airflow db upgrade
+airflow db migrate
 
 # STEP 2: Create admin user (agar yo‘q bo‘lsa)
 airflow users create \
