@@ -2,7 +2,8 @@
 set -e
 
 echo ">>> Initializing Airflow DB..."
-airflow db migrate
+airflow db reset -y
+airflow db init
 
 echo ">>> Checking for existing admin user..."
 if ! airflow users list | grep -q "admin"; then
